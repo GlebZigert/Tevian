@@ -97,7 +97,7 @@ Zoom -&gt; Ctrl+Wheel</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>
@@ -108,7 +108,7 @@ Zoom -&gt; Ctrl+Wheel</string>
   <customwidget>
    <class>MyGraphicsView</class>
    <extends>QGraphicsView</extends>
-   <header>mygraphicsview.h</header>
+   <header location="global">mygraphicsview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

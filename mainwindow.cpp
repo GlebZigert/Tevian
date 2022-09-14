@@ -46,45 +46,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    /*
-
-         curl -x 192.168.0.1:3128
-        -X 'POST'
-        'https://backend.facecloud.tevian.ru/api/v1/login'
-        -H 'accept: application/json'
-        -H 'Content-Type: application/json'
-        -d '{
-              "email": "gleb.zigert@yandex.ru",
-              "password": "gztevian"
-            }'
-
-
-*/
-    QNetworkAccessManager * mgr = new QNetworkAccessManager(this);
-
-
-    QNetworkProxy proxy;
-    proxy.setType(QNetworkProxy::HttpProxy);
-    proxy.setHostName("192.168.0.1");
-    proxy.setPort(3128);
-
-    mgr->setProxy(proxy);
-
-    const QUrl url(QStringLiteral("https://backend.facecloud.tevian.ru/api/v1/login"));
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-     QJsonObject obj;
-    obj["email"] = "gleb.zigert@yandex.ru";
-    obj["password"] = "gztevian";
-    QJsonDocument doc(obj);
-    QByteArray data = doc.toJson();
-
-
-    connect(mgr,SIGNAL(finished(QNetworkReply*)),this,SLOT(onfinish(QNetworkReply*)));
-    connect(mgr,SIGNAL(finished(QNetworkReply*)),mgr,SLOT(deleteLater()));
-
- //   mgr->get(QNetworkRequest(QUrl("http://www.google.com")));
-    mgr->post(request, data);
 }
 
 
@@ -123,6 +84,8 @@ void MainWindow::onPressLoadImage()
     ui->m_graphicsView->viewFit();
 
     ui->statusBar->showMessage("image loaded", 0);
+
+
 }
 
 void MainWindow::onPressSaveImage()
@@ -167,3 +130,5 @@ void MainWindow::onfinish(QNetworkReply *rep)
     QString str(bts);
     qDebug()<<str;
 }
+
+

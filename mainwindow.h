@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
-#include "requester/requester.h"
 #include <QtNetwork/QNetworkReply>
+#include "rest.h"
 namespace Ui {
 class MainWindow;
 }
@@ -17,17 +17,19 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    Requester requester;
 
 private:
     Ui::MainWindow *ui;
     QGraphicsScene* m_graphicsScene;
+
+    Rest rest;
 
 private slots:
     void onPressLoadImage();
     void onPressSaveImage();
     void onPressFitWindow();
     void onfinish(QNetworkReply *rep);
+
 };
 
 #endif // MAINWINDOW_H

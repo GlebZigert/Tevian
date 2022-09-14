@@ -25,14 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    MyGraphicsView.cpp \
-    requester/requester.cpp
+    mygraphicsview.cpp \
+    rest.cpp
+
 
 HEADERS  += mainwindow.h \
-    MyGraphicsView.h \
-    requester/requester.h
+    mygraphicsview.h \
+    rest.h
+
 
 FORMS    += mainwindow.ui
 
-DISTFILES += \
-    requester/requester.pri

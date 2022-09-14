@@ -23,6 +23,8 @@ void Rest::request_token()
     const QUrl url(QStringLiteral("https://backend.facecloud.tevian.ru/api/v1/login"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+ //    request.setHeader(QNetworkRequest::, "application/json");
      QJsonObject obj;
     obj["email"] = "gleb.zigert@yandex.ru";
     obj["password"] = "gztevian";
@@ -30,6 +32,21 @@ void Rest::request_token()
     QByteArray data = doc.toJson();
      mgr.post(request, data);
      expect=expectType::token;
+}
+
+void Rest::request_detect(QString filepath)
+{
+    const QUrl url(QStringLiteral("https://backend.facecloud.tevian.ru/api/v1/detect"));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+     request.setRawHeader(QByteArray("Authorization"), QByteArray(token.toUtf8()));
+     QJsonObject obj;
+    obj["email"] = "gleb.zigert@yandex.ru";
+    obj["password"] = "gztevian";
+    QJsonDocument doc(obj);
+    QByteArray data = doc.toJson();
+     mgr.post(request, data);
+     expect=expectType::detect;
 }
 
 void Rest::get_token_from_JSON(QJsonDocument doc)
@@ -43,8 +60,10 @@ void Rest::get_token_from_JSON(QJsonDocument doc)
         qDebug()<<"success: access token returned";
          jsonObject = doc.object();
          data =jsonObject["data"].toObject();
-        token=data["access_token"].toString();
+         token="Bearer ";
+        token+=data["access_token"].toString();
         qDebug()<<"token: "<<token;
+        request_detect("");
 
         break;
 
@@ -86,6 +105,15 @@ void Rest::onfinish(QNetworkReply *rep)
 
 
         break;
+
+    case expectType::detect:
+
+        qDebug()<<"detect";
+      //  get_token_from_JSON(doc);
+
+
+        break;
+
     default:
         break;
     }

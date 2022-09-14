@@ -6,10 +6,11 @@
 #include <QObject>
 
 enum expectType{
-        token,
-        anything_else
+    token,
+    detect,
+    anything_else
 
-    };
+};
 
 class Rest : public QObject
 {
@@ -26,6 +27,7 @@ private:
  int expect;
 
  void request_token();
+ void request_detect(QString filepath);
  void get_token_from_JSON(QJsonDocument doc);
 
 

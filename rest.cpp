@@ -39,7 +39,7 @@ void Rest::request_detect(QString filepath)
 {
     const QUrl url(QStringLiteral("https://backend.facecloud.tevian.ru/api/v1/detect"));
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "image/jpeg");
      request.setRawHeader(QByteArray("Authorization"), QByteArray(token.toUtf8()));
 
      qDebug()<<"filePath: "<<filepath;
@@ -47,7 +47,10 @@ void Rest::request_detect(QString filepath)
      if(!CurrentFile.open(QIODevice::ReadOnly)) return;
 
     QByteArray data = CurrentFile.readAll();
-    qDebug()<<data.size();
+   //  QByteArray data = "ghjcnj[eqyz";
+    qDebug()<<"data size: "<<data.size();
+
+  //  data="{}";
 
      mgr.post(request, data);
      expect=expectType::detect;

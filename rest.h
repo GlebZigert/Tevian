@@ -19,6 +19,8 @@ public:
     explicit Rest(QObject *parent = nullptr);
     ~Rest();
 
+    void request_detect(QString filepath);
+
 private:
 
  QNetworkAccessManager mgr;
@@ -27,7 +29,7 @@ private:
  int expect;
 
  void request_token();
- void request_detect(QString filepath);
+
  void get_token_from_JSON(QJsonDocument doc);
 
 

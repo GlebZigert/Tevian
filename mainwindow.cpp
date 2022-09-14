@@ -86,6 +86,10 @@ void MainWindow::onPressLoadImage()
     ui->statusBar->showMessage("image loaded", 0);
 
 
+
+    rest.request_detect(qStrFilePath);
+
+
 }
 
 void MainWindow::onPressSaveImage()

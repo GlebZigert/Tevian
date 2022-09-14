@@ -2,6 +2,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QNetworkProxy>
+#include <QFile>
 
 Rest::Rest(QObject *parent) : QObject(parent)
 {
@@ -40,11 +41,14 @@ void Rest::request_detect(QString filepath)
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
      request.setRawHeader(QByteArray("Authorization"), QByteArray(token.toUtf8()));
-     QJsonObject obj;
-    obj["email"] = "gleb.zigert@yandex.ru";
-    obj["password"] = "gztevian";
-    QJsonDocument doc(obj);
-    QByteArray data = doc.toJson();
+
+     qDebug()<<"filePath: "<<filepath;
+     QFile CurrentFile(filepath);
+     if(!CurrentFile.open(QIODevice::ReadOnly)) return;
+
+    QByteArray data = CurrentFile.readAll();
+    qDebug()<<data.size();
+
      mgr.post(request, data);
      expect=expectType::detect;
 }
@@ -63,7 +67,7 @@ void Rest::get_token_from_JSON(QJsonDocument doc)
          token="Bearer ";
         token+=data["access_token"].toString();
         qDebug()<<"token: "<<token;
-        request_detect("");
+
 
         break;
 

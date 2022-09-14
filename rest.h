@@ -5,6 +5,12 @@
 #include <QNetworkReply>
 #include <QObject>
 
+enum expectType{
+        token,
+        anything_else
+
+    };
+
 class Rest : public QObject
 {
     Q_OBJECT
@@ -17,7 +23,10 @@ private:
  QNetworkAccessManager mgr;
  QString token;
 
- void get_token();
+ int expect;
+
+ void request_token();
+ void get_token_from_JSON(QJsonDocument doc);
 
 
 private slots:

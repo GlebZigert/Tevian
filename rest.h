@@ -4,7 +4,13 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QObject>
-
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QNetworkProxy>
+#include <QList>
+#include <QPoint>
+#include <QFile>
 
 enum expectType{
     token,
@@ -40,7 +46,7 @@ private slots:
      void onfinish(QNetworkReply *rep);
 signals:
      void box(int,int,int,int);
-
+     void landmarks(QList<QPoint>);
 };
 
 #endif // REST_H

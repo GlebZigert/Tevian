@@ -1,9 +1,5 @@
 #include "rest.h"
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QNetworkProxy>
-#include <QFile>
+
 
 Rest::Rest(QObject *parent) : QObject(parent)
 {
@@ -99,8 +95,27 @@ void Rest::get_bbox_from_JSON(QJsonDocument doc)
 
            qDebug()<<"get bbox: "<<height<<" "<<width<<" "<<x<<" "<<y;
 
-        emit box(height,width,x,y);
+        QJsonArray landmarks_json = one["landmarks"].toArray();
 
+        QList<QPoint> list;
+        qDebug()<<" landmarks:";
+        for(QJsonValue one : landmarks_json) {
+
+            QPoint point;
+            int x = one["x"].toInt();
+            int y = one["y"].toInt();
+            qDebug()<<x<<" "<<y;
+            point.setX(x);
+            point.setY(y);
+            list.append(point);
+
+
+        }
+
+
+
+        emit box(height,width,x,y);
+        emit landmarks(list);
 
 
 

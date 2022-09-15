@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QtNetwork/QNetworkReply>
 #include "rest.h"
+#include <QGraphicsEllipseItem>
 namespace Ui {
 class MainWindow;
 }
@@ -24,12 +25,15 @@ private:
 
     Rest rest;
 
+
+
 private slots:
     void onPressLoadImage();
     void onPressSaveImage();
     void onPressFitWindow();
     void onfinish(QNetworkReply *rep);
     void draw_bbox(int,int,int,int);
+    void draw_landmarks(QList<QPoint>);
 
 
 

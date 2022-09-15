@@ -18,6 +18,9 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QNetworkProxy>
+
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -25,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     connect(&rest,SIGNAL(box(int,int,int,int)),this,SLOT(draw_bbox(int,int,int,int)));
+    connect(&rest,SIGNAL(landmarks(QList<QPoint>)),this,SLOT(draw_landmarks(QList<QPoint>)));
+
 
     m_graphicsScene = new QGraphicsScene();
     m_graphicsScene->setItemIndexMethod(QGraphicsScene::NoIndex);
@@ -147,6 +152,26 @@ void MainWindow::draw_bbox(int h, int w, int x, int y)
     pen.setWidth(3);
     pen.setColor(Qt::red);
     m_graphicsScene->addRect(x,y,w,h,pen);
+}
+
+void MainWindow::draw_landmarks(QList<QPoint> landmarks)
+{
+    qDebug()<<"draw landmarks: ";
+
+       for(QPoint point : landmarks) {
+
+           auto circle = new QGraphicsEllipseItem(point.x(), point.y(), 1, 1);
+           circle->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+           circle->setBrush(Qt::green);
+          m_graphicsScene->addItem(circle);
+       }
+
+       auto circle = new QGraphicsEllipseItem(50, 50, 1, 1);
+     //  circle->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+       circle->setBrush(Qt::white);
+
+      m_graphicsScene->addItem(circle);
+
 }
 
 

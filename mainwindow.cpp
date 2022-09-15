@@ -4,7 +4,7 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 
-#include <QImageReader>
+
 #include <QImageWriter>
 
 #include <QMessageBox>
@@ -31,22 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&rest,SIGNAL(landmarks(QList<QPoint>)),this,SLOT(draw_landmarks(QList<QPoint>)));
 
 
-    m_graphicsScene = new QGraphicsScene();
-    m_graphicsScene->setItemIndexMethod(QGraphicsScene::NoIndex);
-    QImage bground(50, 50, QImage::Format_RGB888);
-    for (int y = 0; y < 25; y++)
-    {
-        for (int x = 0; x < 25; x++)
-        {
-            bground.setPixel(x, y, qRgb(0xCA, 0xCA, 0xCA));
-            bground.setPixel(x + 25, y, qRgb(0xFF, 0xFF, 0xFF));
-            bground.setPixel(x, y + 25, qRgb(0xFF, 0xFF, 0xFF));
-            bground.setPixel(x + 25, y + 25, qRgb(0xCA, 0xCA, 0xCA));
-        }
-    }
-    m_graphicsScene->setBackgroundBrush(QPixmap::fromImage(bground));
 
-    ui->m_graphicsView->setScene(m_graphicsScene);
 
     ui->statusBar->showMessage("ready", 0);
 
@@ -72,23 +57,8 @@ void MainWindow::onPressLoadImage()
     if (qStrFilePath.isEmpty())
         return;
 
-    QImageReader reader(qStrFilePath);
-    if (!reader.canRead())
-    {
-        QMessageBox msgBox;
-        msgBox.setText("Cannot read file");
-        msgBox.exec();
-        return;
-    }
-    if (!m_graphicsScene->sceneRect().isEmpty())
-    {
-        m_graphicsScene->clear();
-    }
-    QImage qimg = reader.read();
-    m_graphicsScene->setSceneRect(qimg.rect());
-    m_graphicsScene->addPixmap(QPixmap::fromImage(qimg));
-
-    ui->m_graphicsView->viewFit();
+    ui->m_graphicsView->load(qStrFilePath);
+   // ui->m_graphicsView->viewFit();
 
     ui->statusBar->showMessage("image loaded", 0);
 
@@ -99,36 +69,6 @@ void MainWindow::onPressLoadImage()
 
 }
 
-void MainWindow::onPressSaveImage()
-{
-    if (m_graphicsScene->sceneRect().isEmpty())
-        return;
-
-    m_graphicsScene->clearSelection();
-    QImage img(m_graphicsScene->sceneRect().size().toSize(), QImage::Format_RGB888);
-    QPainter painter(&img);
-    m_graphicsScene->render(&painter);
-
-    QString qStrFilePath = QFileDialog::getSaveFileName(this,
-            tr("Save Image"),
-            QStandardPaths::writableLocation(QStandardPaths::CacheLocation).replace("cache", "newfile.jpg"),
-            tr("JPG file (*.jpg);;PNG file (*.png);;BMP file (*.bmp)"));
-
-    if (qStrFilePath.isEmpty())
-        return;
-
-    QImageWriter writer(qStrFilePath);
-    if(!writer.canWrite())
-    {
-        QMessageBox msgBox;
-        msgBox.setText("Cannot write file");
-        msgBox.exec();
-        return;
-    }
-    writer.write(img);
-
-    ui->statusBar->showMessage("image saved", 0);
-}
 
 void MainWindow::onPressFitWindow()
 {
@@ -146,31 +86,24 @@ void MainWindow::draw_bbox(int h, int w, int x, int y)
 {
     qDebug()<<"draw bbox: "<<h<<" "<<w<<" "<<x<<" "<<y;
 
-    QPen pen;  // creates a default pen
 
-
-    pen.setWidth(3);
-    pen.setColor(Qt::red);
-    m_graphicsScene->addRect(x,y,w,h,pen);
 }
 
 void MainWindow::draw_landmarks(QList<QPoint> landmarks)
 {
     qDebug()<<"draw landmarks: ";
-
+/*
        for(QPoint point : landmarks) {
 
-           auto circle = new QGraphicsEllipseItem(point.x(), point.y(), 1, 1);
+           auto circle = new QGraphicsEllipseItem(point.x(), point.y(), 5, 5);
            circle->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
            circle->setBrush(Qt::green);
+           circle->setFlag(QGraphicsItem::ItemIgnoresTransformations);
           m_graphicsScene->addItem(circle);
        }
+       */
 
-       auto circle = new QGraphicsEllipseItem(50, 50, 1, 1);
-     //  circle->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
-       circle->setBrush(Qt::white);
 
-      m_graphicsScene->addItem(circle);
 
 }
 

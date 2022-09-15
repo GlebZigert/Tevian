@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QGraphicsScene>
+
 #include <QtNetwork/QNetworkReply>
 #include "rest.h"
 #include <QGraphicsEllipseItem>
@@ -21,7 +21,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene* m_graphicsScene;
+
 
     Rest rest;
 
@@ -29,7 +29,6 @@ private:
 
 private slots:
     void onPressLoadImage();
-    void onPressSaveImage();
     void onPressFitWindow();
     void onfinish(QNetworkReply *rep);
     void draw_bbox(int,int,int,int);

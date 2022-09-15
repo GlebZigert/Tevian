@@ -3,6 +3,7 @@
 #include <QGraphicsView>
 #include <QWheelEvent>
 #include <QKeyEvent>
+#include <QGraphicsScene>
 
 class MyGraphicsView : public QGraphicsView
 {
@@ -14,6 +15,9 @@ public:
 	void viewFit();
     void zoomIn();
     void zoomOut();
+    void load(QString filepath);
+
+    QGraphicsScene* m_graphicsScene;
 
 private:
     void scaleView(qreal scaleFactor);

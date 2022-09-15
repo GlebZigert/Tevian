@@ -2,6 +2,7 @@
 #include "QGraphicsEllipseItem"
 #include <QImageReader>
 #include <QDebug>
+#include <cmath>
 
 MyGraphicsView::MyGraphicsView(QWidget *parent)
 	: QGraphicsView(parent)
@@ -14,10 +15,22 @@ MyGraphicsView::MyGraphicsView(QWidget *parent)
 	isResized = false;
 	isLandscape = false;
 
+    xxx=50;
+    n=0;
     setDragMode(QGraphicsView::ScrollHandDrag);
 
-    m_graphicsScene = new QGraphicsScene();
-    m_graphicsScene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    scene = new QGraphicsScene();
+    scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+
+    group_1 = new QGraphicsItemGroup();
+    group_2 = new QGraphicsItemGroup();
+
+    qDebug()<<"items at [0] "<<scene->items().size();
+    scene->addItem(group_1);
+    qDebug()<<"items at [1] "<<scene->items().size();
+    scene->addItem(group_2);
+    qDebug()<<"items at [2] "<<scene->items().size();
+
     QImage bground(50, 50, QImage::Format_RGB888);
     for (int y = 0; y < 25; y++)
     {
@@ -29,9 +42,12 @@ MyGraphicsView::MyGraphicsView(QWidget *parent)
             bground.setPixel(x + 25, y + 25, qRgb(0xCA, 0xCA, 0xCA));
         }
     }
-    m_graphicsScene->setBackgroundBrush(QPixmap::fromImage(bground));
+    scene->setBackgroundBrush(QPixmap::fromImage(bground));
 
-   this->setScene(m_graphicsScene);
+
+
+
+   this->setScene(scene);
 
 
 }
@@ -42,12 +58,19 @@ MyGraphicsView::~MyGraphicsView()
 
 void MyGraphicsView::zoomIn()
 {
+     if(n<30){
+    n++;
+
 	scaleView(qreal(1.2));
+     }
 }
 
 void MyGraphicsView::zoomOut()
 {
-    scaleView(1 / qreal(1.2));
+    if(n>1){
+        n--;
+    scaleView(1/qreal(1.2));
+    }
 }
 
 void MyGraphicsView::load(QString qStrFilePath)
@@ -63,14 +86,70 @@ void MyGraphicsView::load(QString qStrFilePath)
 
         return;
     }
-    if (!m_graphicsScene->sceneRect().isEmpty())
+    if (!scene->sceneRect().isEmpty())
     {
-        m_graphicsScene->clear();
+        deleteItemsFromGroup(group_1);
+        deleteItemsFromGroup(group_2);
+        qDebug()<<"items at [3] "<<scene->items().size();
     }
     QImage qimg = reader.read();
-    m_graphicsScene->setSceneRect(qimg.rect());
-    m_graphicsScene->addPixmap(QPixmap::fromImage(qimg));
+    scene->setSceneRect(qimg.rect());
 
+
+    w = qimg.width();
+    h = qimg.height();
+    QGraphicsPixmapItem* pxm = new QGraphicsPixmapItem(QPixmap::fromImage(qimg));
+    pointer = pxm;
+
+
+    qDebug()<<"items at [4]"<<scene->items().size();
+    group_1->addToGroup(scene->addPixmap(QPixmap::fromImage(qimg)));
+ qDebug()<<"items  at [5]"<<scene->items().size();
+
+
+ auto circle = new QGraphicsEllipseItem(150, 150, 25, 25,pxm);
+// circle->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+ circle->setBrush(Qt::green);
+ circle->setFlag(QGraphicsItem::ItemIgnoresTransformations);
+
+group_1->addToGroup(circle);
+ // group_1->addToGroup(scene->addPixmap(QPixmap::fromImage(qimg)));
+
+  /* Нарисуем красный квадрат
+   * */
+
+  /*
+  QPen penRed(Qt::red);   //
+  int width = this->width();      // определяем ширину нашего виджета
+  int height = this->height();    // определяем высоту нашего виджета
+  int sideOfSquare = (height > width) ? (width - 60) : (height - 60);
+  int centerOfWidget_X = width/2;
+  int centerOfWidget_Y = height/2;
+
+  group_2->addToGroup(scene->addLine(centerOfWidget_X - (sideOfSquare/2),
+                                     centerOfWidget_Y - (sideOfSquare/2),
+                                     centerOfWidget_X + (sideOfSquare/2),
+                                     centerOfWidget_Y - (sideOfSquare/2),
+                                     penRed));
+
+  group_2->addToGroup(scene->addLine(centerOfWidget_X + (sideOfSquare/2),
+                                     centerOfWidget_Y - (sideOfSquare/2),
+                                     centerOfWidget_X + (sideOfSquare/2),
+                                     centerOfWidget_Y + (sideOfSquare/2),
+                                     penRed));
+
+  group_2->addToGroup(scene->addLine(centerOfWidget_X + (sideOfSquare/2),
+                                     centerOfWidget_Y + (sideOfSquare/2),
+                                     centerOfWidget_X - (sideOfSquare/2),
+                                     centerOfWidget_Y + (sideOfSquare/2),
+                                     penRed));
+
+  group_2->addToGroup(scene->addLine(centerOfWidget_X - (sideOfSquare/2),
+                                     centerOfWidget_Y + (sideOfSquare/2),
+                                     centerOfWidget_X - (sideOfSquare/2),
+                                     centerOfWidget_Y - (sideOfSquare/2),
+                                     penRed));
+*/
     viewFit();
 
 }
@@ -82,12 +161,17 @@ void MyGraphicsView::viewFit()
 
 	if (sceneRect().width() > sceneRect().height())
 		isLandscape = true;
-	else
+    else
 		isLandscape = false;
 }
 
 void MyGraphicsView::wheelEvent(QWheelEvent *event)
 {
+
+  //  scene->addItem(circle);
+
+ qDebug()<<"items "<<scene->items().size();
+
 	if (event->modifiers() == Qt::ControlModifier)
 	{
 		if (event->delta() > 0) zoomIn();
@@ -106,6 +190,8 @@ void MyGraphicsView::wheelEvent(QWheelEvent *event)
 
 void MyGraphicsView::scaleView(qreal scaleFactor)
 {
+
+ //   deleteItemsFromGroup(group_2);
 
 
 
@@ -135,7 +221,7 @@ void MyGraphicsView::scaleView(qreal scaleFactor)
 		if (!isResized || scaleFactor < 1)
 			return;
 	}
-    else if (expRectLength > imgLength * 10) // maximum zoom : x10
+    else if (expRectLength > imgLength * 30) // maximum zoom : x10
 	{
 		if (!isResized || scaleFactor > 1)
 			return;
@@ -146,14 +232,39 @@ void MyGraphicsView::scaleView(qreal scaleFactor)
 	}
 
 	scale(scaleFactor, scaleFactor);
-    qDebug()<<scaleFactor
-           <<" "<<this->scene()->width()
-           <<" "<<this->scene()->height()
-           <<" "<<this->height()
-           <<" "<<this->width()
+     xxx=xxx*scaleFactor;
+     /*
+    qDebug()<<n
+           <<" "<<xxx<<" "<<50/pow(0.8,n);
              ;
+    */
+   //  qDebug()<<n<<" "<<w<<" "<<h<<" "<<scene->width()<<" "<<scene->height()<<" "<<this->width()<<" "<<this->height();
+
+  //  auto point = QGraphicsItem::mapFromItem(&pointer, QPointF(50,50));
+
+QPointF point = pointer->mapToScene(50,50);
+qDebug()<<"point: "<<point.x()<<" "<<point.y();
+}
+
+void MyGraphicsView::deleteItemsFromGroup(QGraphicsItemGroup *group)
+{
+    /* Перебираем все элементы сцены, и если они принадлежат группе,
+     * переданной в метод, то удаляем их
+     * */
+    if(scene->items().size()>0)
+    foreach( QGraphicsItem *item, scene->items()) {
+       if(item->group() == group ) {
+           group->removeFromGroup(item);
+           scene->removeItem(item);
+          delete item;
+           qDebug()<<"delete";
+       }
+    }
 
 }
+
+
+
 
 void MyGraphicsView::resizeEvent(QResizeEvent *event)
 {

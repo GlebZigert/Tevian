@@ -99,7 +99,7 @@ void MainWindow::draw_landmarks(QList<QPoint> landmarks)
            circle->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
            circle->setBrush(Qt::green);
            circle->setFlag(QGraphicsItem::ItemIgnoresTransformations);
-          m_graphicsScene->addItem(circle);
+          scene->addItem(circle);
        }
        */
 

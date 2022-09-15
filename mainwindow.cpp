@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    connect(&rest,SIGNAL(box(int,int,int,int)),this,SLOT(draw_bbox(int,int,int,int)));
+
     m_graphicsScene = new QGraphicsScene();
     m_graphicsScene->setItemIndexMethod(QGraphicsScene::NoIndex);
     QImage bground(50, 50, QImage::Format_RGB888);
@@ -133,6 +135,18 @@ void MainWindow::onfinish(QNetworkReply *rep)
     QByteArray bts = rep->readAll();
     QString str(bts);
     qDebug()<<str;
+}
+
+void MainWindow::draw_bbox(int h, int w, int x, int y)
+{
+    qDebug()<<"draw bbox: "<<h<<" "<<w<<" "<<x<<" "<<y;
+
+    QPen pen;  // creates a default pen
+
+
+    pen.setWidth(3);
+    pen.setColor(Qt::red);
+    m_graphicsScene->addRect(x,y,w,h,pen);
 }
 
 

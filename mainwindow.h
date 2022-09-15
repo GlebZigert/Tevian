@@ -29,6 +29,9 @@ private slots:
     void onPressSaveImage();
     void onPressFitWindow();
     void onfinish(QNetworkReply *rep);
+    void draw_bbox(int,int,int,int);
+
+
 
 };
 

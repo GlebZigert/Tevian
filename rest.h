@@ -5,6 +5,7 @@
 #include <QNetworkReply>
 #include <QObject>
 
+
 enum expectType{
     token,
     detect,
@@ -32,10 +33,13 @@ private:
 
  void get_token_from_JSON(QJsonDocument doc);
 
+ void get_bbox_from_JSON(QJsonDocument doc);
+
 
 private slots:
      void onfinish(QNetworkReply *rep);
 signals:
+     void box(int,int,int,int);
 
 };
 

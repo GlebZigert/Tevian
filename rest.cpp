@@ -1,12 +1,19 @@
 #include "rest.h"
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QJsonArray>
 #include <QNetworkProxy>
 #include <QFile>
 
 Rest::Rest(QObject *parent) : QObject(parent)
 {
     qDebug()<<"Rest::Rest";
+    QNetworkProxy proxy;
+    proxy.setType(QNetworkProxy::HttpProxy);
+    proxy.setHostName("192.168.0.1");
+    proxy.setPort(3128);
+
+    mgr.setProxy(proxy);
     connect(&mgr,SIGNAL(finished(QNetworkReply*)),this,SLOT(onfinish(QNetworkReply*)));
 
     request_token();
@@ -37,7 +44,7 @@ void Rest::request_token()
 
 void Rest::request_detect(QString filepath)
 {
-    const QUrl url(QStringLiteral("https://backend.facecloud.tevian.ru/api/v1/detect"));
+    const QUrl url(QStringLiteral("https://backend.facecloud.tevian.ru/api/v1/detect?fd_min_size=0&fd_max_size=0&fd_threshold=0.8&rotate_until_faces_found=false&orientation_classifier=false&demographics=true&attributes=true&landmarks=false&liveness=false&quality=false&masks=false"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "image/jpeg");
      request.setRawHeader(QByteArray("Authorization"), QByteArray(token.toUtf8()));
@@ -60,32 +67,48 @@ void Rest::get_token_from_JSON(QJsonDocument doc)
 {
     int status = doc.object().value("status_code").toInt();
     qDebug()<<"status: "<<status;
-    QJsonObject jsonObject;
-    QJsonObject data;
-    switch (status) {
-    case 200:
+
+    if (status==200) {
         qDebug()<<"success: access token returned";
-         jsonObject = doc.object();
-         data =jsonObject["data"].toObject();
+         QJsonObject jsonObject = doc.object();
+         QJsonObject data =jsonObject["data"].toObject();
          token="Bearer ";
         token+=data["access_token"].toString();
         qDebug()<<"token: "<<token;
-
-
-        break;
-
-    case 400:
-        qDebug()<<"error detected in request.";
-        break;
-
-    case 401:
-        qDebug()<<"invalid email or password provided";
-        break;
-
-    default:
-        break;
     }
 
+
+}
+
+void Rest::get_bbox_from_JSON(QJsonDocument doc)
+{
+    int status = doc.object().value("status_code").toInt();
+    qDebug()<<"status: "<<status;
+
+    if (status==200) {
+        qDebug()<<"success";
+         QJsonObject jsonObject = doc.object();
+         QJsonArray data = jsonObject.value("data").toArray();
+         QJsonObject one = data[0].toObject();
+         QJsonObject bbox = one["bbox"].toObject();
+
+         int height = bbox["height"].toInt();
+         int width = bbox["width"].toInt();
+         int x = bbox["x"].toInt();
+         int y = bbox["y"].toInt();
+
+           qDebug()<<"get bbox: "<<height<<" "<<width<<" "<<x<<" "<<y;
+
+        emit box(height,width,x,y);
+
+
+
+
+
+
+
+
+    }
 }
 
 
@@ -116,7 +139,7 @@ void Rest::onfinish(QNetworkReply *rep)
     case expectType::detect:
 
         qDebug()<<"detect";
-      //  get_token_from_JSON(doc);
+     get_bbox_from_JSON(doc);
 
 
         break;

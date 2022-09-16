@@ -14,7 +14,7 @@ class MyGraphicsView :public QGraphicsView
 private:
     MyItem* item;
     int angle;
-
+    int n;
     void zoomIn();
     void zoomOut();
     void scaleView(qreal scaleFactor);

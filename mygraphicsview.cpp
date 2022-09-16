@@ -11,17 +11,20 @@ MyGraphicsView::MyGraphicsView(QWidget *parent) : QGraphicsView(parent){
 
     isResized=false;
     isLandscape=false;
-
+    n=1;
     ppoint = QPointF(100,100);
     list.append(ppoint);
     scale=1;
 
     item = new MyItem();
 
+    item->setFlag(QGraphicsItem::ItemIsMovable,false);
+
     auto scene = new QGraphicsScene(this);
 
 
  setScene(scene);
+setSceneRect(0,0,1920,1080);
 
      points = new QGraphicsItemGroup();
 
@@ -34,17 +37,17 @@ MyGraphicsView::MyGraphicsView(QWidget *parent) : QGraphicsView(parent){
 
 
 
-    setSceneRect(0,0,item->width,item->height);
+
     this->scene()->addItem(item);
     scene->addItem(points);
 
-  QGraphicsEllipseItem *circle = new QGraphicsEllipseItem(-1,-1,10,10,nullptr);
+  QGraphicsEllipseItem *circle = new QGraphicsEllipseItem(0,0,10,10,nullptr);
 
   circle->setBrush(QBrush(Qt::black, Qt::BDiagPattern));
  // QPen pen()
           circle->setPen(QPen(Qt::red, 3));
 
-
+scene->addItem(circle);
 
  //points->addToGroup(circle);
 
@@ -52,6 +55,9 @@ MyGraphicsView::MyGraphicsView(QWidget *parent) : QGraphicsView(parent){
 
 void MyGraphicsView::zoomIn()
 {
+
+    if(n<30){
+       n++;
     qDebug()<<"zoomIn";
    // QPointF point =mapToScene(viewport()->mapFromGlobal(QCursor::pos()));
 
@@ -59,15 +65,23 @@ void MyGraphicsView::zoomIn()
 
   //  item->setTransformOriginPoint(p);
     scaleView(qreal(1.05));
+    }
 }
 
 void MyGraphicsView::zoomOut()
 {
+    if(n>1){
+    n--;
+
     scaleView(1/qreal(1.05));
 
    //   QPointF p = QPointF(item->width/2,item->height/2);
   //    item->setTransformOriginPoint(p);
+
      qDebug()<<"zoomOut";
+
+    }
+
 }
 
 void MyGraphicsView::scaleView(qreal scaleFactor)
@@ -175,6 +189,8 @@ void MyGraphicsView::load(QString filapath)
 {
     deleteItemsFromGroup(points);
     item->load(filapath);
+    setSceneRect(0,0,item->width,item->height);
+
 }
 
 void MyGraphicsView::update_ladmarks(QList<QPointF> source)

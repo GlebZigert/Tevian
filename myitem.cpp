@@ -59,6 +59,8 @@ void MyItem::load(QString qStrFilePath)
         this->width=pxm.width();
         this->height=pxm.height();
 
+
+
         update();
 }
 

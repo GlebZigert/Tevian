@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     mygraphicsview.cpp \
+    myitem.cpp \
     rest.cpp
 
 
 HEADERS  += mainwindow.h \
     mygraphicsview.h \
+    myitem.h \
     rest.h
 
 

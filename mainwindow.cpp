@@ -72,7 +72,7 @@ void MainWindow::onPressLoadImage()
 
 void MainWindow::onPressFitWindow()
 {
-    ui->m_graphicsView->viewFit();
+
 }
 
 void MainWindow::onfinish(QNetworkReply *rep)

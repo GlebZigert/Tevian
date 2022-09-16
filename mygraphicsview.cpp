@@ -6,20 +6,43 @@
 
 MyGraphicsView::MyGraphicsView(QWidget *parent) : QGraphicsView(parent){
     angle=0;
-     isResized=false;
-     isLandscape=false;
+
+
+
+    isResized=false;
+    isLandscape=false;
+
+    ppoint = QPointF(100,100);
 
     scale=1;
 
-     item = new MyItem();
+    item = new MyItem();
 
     auto scene = new QGraphicsScene(this);
 
-        setScene(scene);
-        setSceneRect(0,0,item->width,item->height);
-        this->scene()->addItem(item);
 
-        scene->addEllipse(-1,-1,1,1);
+ setScene(scene);
+
+     points = new QGraphicsItemGroup();
+
+
+
+
+
+
+
+
+
+
+    setSceneRect(0,0,item->width,item->height);
+    this->scene()->addItem(item);
+    scene->addItem(points);
+
+    scene->addEllipse(-1,-1,10,10);
+
+
+
+ points->addToGroup(scene->addEllipse(50,-3,5,5));
 
 }
 
@@ -104,6 +127,26 @@ void MyGraphicsView::scaleView(qreal scaleFactor)
      item->moveBy((point.x()-point2.x()),(point.y()-point2.y()));
 
      qDebug()<<": "<<point.x()-point2.x()<<" "<<point.y()-point2.y();
+
+     deleteItemsFromGroup(points);
+
+     QPointF xx = item->mapToScene(QPointF(10,10));
+
+     points->addToGroup(scene()->addEllipse(xx.x(),xx.y(),5,5));
+ points->addToGroup(scene()->addEllipse(50,-20,5,5));
+
+  //
+
+
+}
+
+void MyGraphicsView::deleteItemsFromGroup(QGraphicsItemGroup *group)
+{
+    foreach( QGraphicsItem *item, scene()->items(group->boundingRect())) {
+       if(item->group() == group ) {
+          delete item;
+       }
+}
 }
 
 

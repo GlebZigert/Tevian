@@ -21,6 +21,7 @@ QRectF MyItem::boundingRect() const
 
 void MyItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    qDebug()<<"paint";
     QRectF rect = boundingRect();
 
 

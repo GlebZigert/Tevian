@@ -5,6 +5,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
+#include <QGraphicsItemGroup>
 #include "myitem.h"
 class MyGraphicsView :public QGraphicsView
 {
@@ -20,11 +21,19 @@ private:
     bool isResized;
     bool isLandscape;
 
-    qreal scale;
-public:
-     MyGraphicsView(QWidget *parent = nullptr);
+    QPointF ppoint;
 
-     void load(QString filapath);
+    qreal scale;
+
+    QGraphicsItemGroup  *points;   // Объявляем первую группу элементов
+
+
+    void deleteItemsFromGroup(QGraphicsItemGroup *group);
+
+public:
+    MyGraphicsView(QWidget *parent = nullptr);
+
+    void load(QString filapath);
 
 signals:
 

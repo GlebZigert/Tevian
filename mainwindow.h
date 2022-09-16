@@ -34,7 +34,7 @@ private slots:
     void onPressFitWindow();
     void onfinish(QNetworkReply *rep);
     void draw_bbox(int,int,int,int);
-    void draw_landmarks(QList<QPoint>);
+    void draw_landmarks(QList<QPointF>);
 
 
 

@@ -46,7 +46,7 @@ private slots:
      void onfinish(QNetworkReply *rep);
 signals:
      void box(int,int,int,int);
-     void landmarks(QList<QPoint>);
+     void landmarks(QList<QPointF>);
 };
 
 #endif // REST_H

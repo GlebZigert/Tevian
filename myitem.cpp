@@ -56,8 +56,10 @@ void MyItem::load(QString qStrFilePath)
 
         pxm = QPixmap::fromImage(qimg);
 
+        this->width=pxm.width();
+        this->height=pxm.height();
 
-
+        update();
 }
 
 void MyItem::addPoint(QPointF point)

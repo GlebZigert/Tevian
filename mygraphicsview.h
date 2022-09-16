@@ -21,7 +21,9 @@ private:
     bool isResized;
     bool isLandscape;
 
+
     QPointF ppoint;
+
 
     qreal scale;
 
@@ -30,10 +32,17 @@ private:
 
     void deleteItemsFromGroup(QGraphicsItemGroup *group);
 
+     void update_meta();
+
+     QList<QPointF> list;
 public:
+
+
     MyGraphicsView(QWidget *parent = nullptr);
 
     void load(QString filapath);
+
+    void update_ladmarks( QList<QPointF> list);
 
 signals:
 

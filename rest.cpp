@@ -97,11 +97,11 @@ void Rest::get_bbox_from_JSON(QJsonDocument doc)
 
         QJsonArray landmarks_json = one["landmarks"].toArray();
 
-        QList<QPoint> list;
+        QList<QPointF> list;
         qDebug()<<" landmarks:";
         for(QJsonValue one : landmarks_json) {
 
-            QPoint point;
+            QPointF point;
             int x = one["x"].toInt();
             int y = one["y"].toInt();
             qDebug()<<x<<" "<<y;

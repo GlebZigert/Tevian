@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     connect(&rest,SIGNAL(box(int,int,int,int)),this,SLOT(draw_bbox(int,int,int,int)));
-    connect(&rest,SIGNAL(landmarks(QList<QPoint>)),this,SLOT(draw_landmarks(QList<QPoint>)));
+    connect(&rest,SIGNAL(landmarks(QList<QPointF>)),this,SLOT(draw_landmarks(QList<QPointF>)));
 
 
 
@@ -89,9 +89,13 @@ void MainWindow::draw_bbox(int h, int w, int x, int y)
 
 }
 
-void MainWindow::draw_landmarks(QList<QPoint> landmarks)
+void MainWindow::draw_landmarks(QList<QPointF> landmarks)
 {
     qDebug()<<"draw landmarks: ";
+
+
+    ui->m_graphicsView->update_ladmarks(landmarks);
+
 /*
        for(QPoint point : landmarks) {
 

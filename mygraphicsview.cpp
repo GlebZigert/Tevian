@@ -13,7 +13,7 @@ MyGraphicsView::MyGraphicsView(QWidget *parent) : QGraphicsView(parent){
     isLandscape=false;
 
     ppoint = QPointF(100,100);
-
+    list.append(ppoint);
     scale=1;
 
     item = new MyItem();
@@ -38,11 +38,15 @@ MyGraphicsView::MyGraphicsView(QWidget *parent) : QGraphicsView(parent){
     this->scene()->addItem(item);
     scene->addItem(points);
 
-    scene->addEllipse(-1,-1,10,10);
+  QGraphicsEllipseItem *circle = new QGraphicsEllipseItem(-1,-1,10,10,nullptr);
+
+  circle->setBrush(QBrush(Qt::black, Qt::BDiagPattern));
+ // QPen pen()
+          circle->setPen(QPen(Qt::red, 3));
 
 
 
- points->addToGroup(scene->addEllipse(50,-3,5,5));
+ //points->addToGroup(circle);
 
 }
 
@@ -128,16 +132,32 @@ void MyGraphicsView::scaleView(qreal scaleFactor)
 
      qDebug()<<": "<<point.x()-point2.x()<<" "<<point.y()-point2.y();
 
-     deleteItemsFromGroup(points);
+update_meta();
 
-     QPointF xx = item->mapToScene(QPointF(10,10));
+   //  points->addToGroup(scene()->addEllipse(xx.x(),xx.y(),5,5));
 
-     points->addToGroup(scene()->addEllipse(xx.x(),xx.y(),5,5));
- points->addToGroup(scene()->addEllipse(50,-20,5,5));
 
   //
 
 
+}
+
+void MyGraphicsView::update_meta()
+{
+    deleteItemsFromGroup(points);
+
+    foreach(QPointF point, list){
+
+    QPointF xx = item->mapToScene(point);
+
+    qDebug()<<"xx: "<<xx.x()<<" "<<xx.y();
+    QGraphicsEllipseItem *circle = new QGraphicsEllipseItem(xx.x(),xx.y(),2,2,nullptr);
+
+
+            circle->setPen(QPen(Qt::green, 2));
+
+    points->addToGroup(circle);
+    }
 }
 
 void MyGraphicsView::deleteItemsFromGroup(QGraphicsItemGroup *group)
@@ -153,7 +173,15 @@ void MyGraphicsView::deleteItemsFromGroup(QGraphicsItemGroup *group)
 
 void MyGraphicsView::load(QString filapath)
 {
+    deleteItemsFromGroup(points);
     item->load(filapath);
+}
+
+void MyGraphicsView::update_ladmarks(QList<QPointF> source)
+{
+    list.clear();
+    list.append(source);
+    update_meta();
 }
 
 void MyGraphicsView::wheelEvent(QWheelEvent *event)
@@ -206,6 +234,7 @@ void MyGraphicsView::mouseMoveEvent(QMouseEvent *event)
  //   QPointF point = item->mapToScene(0,0);
 //  //  qDebug()<<QCursor::pos().x()<<" "<<QCursor::pos().y()<<" "<<point.x()<<" "<<point.y()<<" "<<item->pos().x()<<" "item->pos().y();
 //    qDebug()<<item->pos().x()<<" "<<item->pos().y()<<" "<<point.x() <<" "<<point.y();
+    update_meta();
     QGraphicsView::mouseMoveEvent(event);
 }
 

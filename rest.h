@@ -11,6 +11,7 @@
 #include <QList>
 #include <QPoint>
 #include <QFile>
+#include <meta.h>
 
 enum expectType{
     token,

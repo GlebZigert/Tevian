@@ -5,7 +5,7 @@
 
 MyItem::MyItem()
 {
-    load("/home/administrator/8299.jpg");
+ //   load("/home/administrator/8299.jpg");
     this->width=pxm.width();
     this->height=pxm.height();
 

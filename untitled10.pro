@@ -11,12 +11,14 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    meta.cpp \
     myitem.cpp \
     myview.cpp \
     rest.cpp
 
 HEADERS += \
     mainwindow.h \
+    meta.h \
     myitem.h \
     myview.h \
     rest.h

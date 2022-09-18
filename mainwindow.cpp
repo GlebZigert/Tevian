@@ -24,21 +24,27 @@ void MainWindow::draw_landmarks(QList<QPointF> landmarks)
 
 void MainWindow::on_actionLOAD_triggered()
 {
-    QString qStrFilePath = QFileDialog::getOpenFileName(this,
+
+    QStringList paths = QFileDialog::getOpenFileNames(this,
         tr("Open Image"),
         QStandardPaths::writableLocation(QStandardPaths::CacheLocation),
         tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
 
-    if (qStrFilePath.isEmpty())
+    if (paths.isEmpty())
         return;
 
-    ui->widget->load(qStrFilePath);
+    foreach(auto one,paths){
+        qDebug()<<paths;
+    }
+
+ //   ui->widget->load(qStrFilePath);
    // ui->m_graphicsView->viewFit();
 
 
 
 
 
-    rest.request_detect(qStrFilePath);
+  //  rest.request_detect(qStrFilePath);
+
 }
 

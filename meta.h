@@ -15,6 +15,11 @@ public:
      QList<QPointF> landmarks;
      QRectF bbox;
 
+     QString full_face_mask;
+     QString lower_face_mask;
+     QString no_mask;
+     QString other_mask;
+
 signals:
 
 };

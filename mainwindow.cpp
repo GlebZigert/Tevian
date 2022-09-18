@@ -51,7 +51,25 @@ QSharedPointer<Meta> MainWindow::convertJsonToMeta(QJsonObject one)
        meta->landmarks.append(point);
    }
 
+   QJsonObject masks = one["masks"].toObject();
 
+   qDebug()<<"==masks: "<<masks;
+
+   meta->full_face_mask=QString::number( masks["full_face_mask"].toDouble());
+  meta->lower_face_mask=QString::number( masks["lower_face_mask"].toDouble());
+meta->no_mask=QString::number( masks["no_mask"].toDouble());
+meta->other_mask=QString::number( masks["other_mask"].toDouble());
+
+
+  qDebug()<<"full_face_mask "<< meta->full_face_mask;
+
+  qDebug()<<"lower_face_mask "<< meta->lower_face_mask;
+
+
+  qDebug()<<"no_mask "<< meta->no_mask;
+
+
+  qDebug()<<"other_mask "<< meta->other_mask;
 
    return meta;
 

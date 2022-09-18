@@ -1,5 +1,6 @@
 #include "myview.h"
 #include <QGraphicsRectItem>
+#include <QGraphicsTextItem>
 #include <QDebug>
 #include <QTime>
 
@@ -105,8 +106,29 @@ void MyView::update_meta()
     }
 
     QGraphicsRectItem *bbox = new QGraphicsRectItem(rect->mapRectToScene(meta->bbox));
-        bbox->setPen(QPen(Qt::red, 2));
+    bbox->setPen(QPen(Qt::red, 2));
     points->addToGroup(bbox);
+
+
+
+    QGraphicsTextItem *mask = new QGraphicsTextItem("full face mask: "+meta->full_face_mask,nullptr);
+    QGraphicsTextItem *mask1 = new QGraphicsTextItem("lower face mask: "+meta->lower_face_mask,nullptr);
+    QGraphicsTextItem *mask2 = new QGraphicsTextItem("no face mask: "+meta->no_mask,nullptr);
+    QGraphicsTextItem *mask3 = new QGraphicsTextItem("other mask: "+meta->other_mask,nullptr);
+
+    QGraphicsRectItem* back = new QGraphicsRectItem(0,0,200,50);
+    back->setPen(QPen(Qt::white, 2));
+    back->setBrush(Qt::white);
+
+    mask1->moveBy(0,10);
+    mask2->moveBy(0,20);
+    mask3->moveBy(0,30);
+    points->addToGroup(back);
+    points->addToGroup(mask);
+    points->addToGroup(mask1);
+    points->addToGroup(mask2);
+    points->addToGroup(mask3);
+
 
 
 }

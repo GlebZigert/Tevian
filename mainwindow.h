@@ -1,43 +1,36 @@
-﻿#ifndef MAINWINDOW_H
+#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-#include <QtNetwork/QNetworkReply>
 #include "rest.h"
-#include <QGraphicsEllipseItem>
-namespace Ui {
-class MainWindow;
-}
+#include <QStandardPaths>
+
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 
+
+
+
+private slots:
+    void on_actionLOAD_triggered();
+   void draw_landmarks(QList<QPointF>);
 private:
     Ui::MainWindow *ui;
-
-
-
 
     Rest rest;
 
 
 
-private slots:
-    void onPressLoadImage();
-    void onPressFitWindow();
-    void onfinish(QNetworkReply *rep);
-    void draw_bbox(int,int,int,int);
-    void draw_landmarks(QList<QPointF>);
-
-
 
 };
-
 #endif // MAINWINDOW_H

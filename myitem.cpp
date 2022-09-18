@@ -5,7 +5,7 @@
 
 MyItem::MyItem()
 {
-    load("/home/administrator/jekson.jpeg");
+    load("/home/administrator/8299.jpg");
     this->width=pxm.width();
     this->height=pxm.height();
 
@@ -15,7 +15,7 @@ MyItem::MyItem()
 QRectF MyItem::boundingRect() const
 {
     // outer most edges
-    return QRectF(0,0,this->width,this->height);
+    return QRectF(0,0,this->width, this->height);
    // return QRectF(0,0,100,100);
 }
 

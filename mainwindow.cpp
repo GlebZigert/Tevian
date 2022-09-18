@@ -180,3 +180,9 @@ if(current-1<0){
     current--;
 }
 
+
+void MainWindow::on_pushButton_clicked()
+{
+    on_actionLOAD_triggered();
+}
+

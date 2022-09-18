@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "rest.h"
 #include <QStandardPaths>
+#include <meta.h>
+#include <QSharedPointer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,14 +18,22 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QStringList paths;
+    int current;
 
+    QMap<QString, QSharedPointer<Meta>> map;
 
-
+    QSharedPointer<Meta> convertJsonToMeta(QJsonObject);
 
 
 private slots:
     void on_actionLOAD_triggered();
-   void draw_landmarks(QList<QPointF>);
+    void get_meta(QString file, QJsonObject meta);
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_3_clicked();
+
 private:
     Ui::MainWindow *ui;
 

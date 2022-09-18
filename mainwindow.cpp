@@ -7,7 +7,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(&rest,SIGNAL(landmarks(QList<QPointF>)),this,SLOT(draw_landmarks(QList<QPointF>)));
+    current=0;
+    connect(&rest,SIGNAL(meta(QString,QJsonObject)),this,SLOT(get_meta(QString,QJsonObject)));
 }
 
 MainWindow::~MainWindow()
@@ -15,17 +16,50 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::draw_landmarks(QList<QPointF> landmarks)
+QSharedPointer<Meta> MainWindow::convertJsonToMeta(QJsonObject one)
 {
-    qDebug()<<"draw_landmarks(QList<QPointF> landmarks)";
-      ui->widget->update_ladmarks(landmarks);
+
+       QSharedPointer<Meta> meta =  QSharedPointer<Meta>::create();
+
+    QJsonObject bbox = one["bbox"].toObject();
+
+    int height = bbox["height"].toInt();
+    int width = bbox["width"].toInt();
+    int x = bbox["x"].toInt();
+    int y = bbox["y"].toInt();
+
+      qDebug()<<"get bbox: "<<height<<" "<<width<<" "<<x<<" "<<y;
+
+   QJsonArray landmarks_json = one["landmarks"].toArray();
+
+   QList<QPointF> list;
+//      qDebug()<<" landmarks:";
+   for(QJsonValue one : landmarks_json) {
+
+       QPointF point;
+       int x = one["x"].toInt();
+       int y = one["y"].toInt();
+  //     qDebug()<<x<<" "<<y;
+       point.setX(x);
+       point.setY(y);
+       meta->landmarks.append(point);
+   }
+
+
+
+   return meta;
+
+
+
+
 }
+
 
 
 void MainWindow::on_actionLOAD_triggered()
 {
 
-    QStringList paths = QFileDialog::getOpenFileNames(this,
+     paths = QFileDialog::getOpenFileNames(this,
         tr("Open Image"),
         QStandardPaths::writableLocation(QStandardPaths::CacheLocation),
         tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
@@ -34,8 +68,10 @@ void MainWindow::on_actionLOAD_triggered()
         return;
 
     foreach(auto one,paths){
-        qDebug()<<paths;
+        qDebug()<<one;
+        rest.add_request(one);
     }
+    rest.request_detect();
 
  //   ui->widget->load(qStrFilePath);
    // ui->m_graphicsView->viewFit();
@@ -46,5 +82,43 @@ void MainWindow::on_actionLOAD_triggered()
 
   //  rest.request_detect(qStrFilePath);
 
+}
+
+void MainWindow::get_meta(QString file, QJsonObject meta)
+{
+    qDebug()<<"get meta for "<<file;
+    map.insert(file,convertJsonToMeta(meta));
+
+
+
+}
+
+
+void MainWindow::on_pushButton_2_clicked()
+{
+qDebug()<<"next";
+if(paths.size()==0)
+    return;
+
+
+
+
+
+
+
+QString key = paths.at(current);
+
+ui->widget->load(key);
+ui->widget->update_ladmarks(map.value(key)->landmarks);
+if(current+1>=paths.size()){
+    current=0;
+}else
+current++;
+}
+
+
+void MainWindow::on_pushButton_3_clicked()
+{
+qDebug()<<"prev";
 }
 

@@ -11,6 +11,7 @@
 #include <QList>
 #include <QPoint>
 #include <QFile>
+#include <QQueue>
 #include <meta.h>
 
 enum expectType{
@@ -27,7 +28,10 @@ public:
     explicit Rest(QObject *parent = nullptr);
     ~Rest();
 
-    void request_detect(QString filepath);
+    void request_detect();
+
+
+    void add_request(QString filepath);
 
 private:
 
@@ -42,12 +46,16 @@ private:
 
  void get_bbox_from_JSON(QJsonDocument doc);
 
+ QQueue<QString>  queue;
+ QString current;
+
 
 private slots:
      void onfinish(QNetworkReply *rep);
 signals:
      void box(int,int,int,int);
      void landmarks(QList<QPointF>);
+     void meta(QString file, QJsonObject meta);
 };
 
 #endif // REST_H

@@ -131,8 +131,16 @@ void MainWindow::get_meta(QString file, QJsonObject meta)
     qDebug()<<"get meta for "<<file;
     map.insert(file,convertJsonToMeta(meta));
 
+    if(map.size()<paths.size()){
+QString str="Обработано изображений: ";
+str+=QString::number(map.size());
+str+=" из ";
+str+=QString::number(paths.size());
 
-
+ui->label->setText(str);
+    }else{
+        ui->label->clear();
+    }
 }
 
 

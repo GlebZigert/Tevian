@@ -85,9 +85,13 @@ void MyView::deleteItemsFromGroup(QGraphicsItemGroup *group)
 void MyView::update_meta()
 {
     qDebug()<<"update_meta";
+
+    if(meta.isNull())
+        return;
+
     deleteItemsFromGroup(points);
 
-    foreach(QPointF point, list){
+    foreach(QPointF point, meta->landmarks){
 
     QPointF xx = rect->mapToScene(point);
 
@@ -99,6 +103,12 @@ void MyView::update_meta()
 
     points->addToGroup(circle);
     }
+
+    QGraphicsRectItem *bbox = new QGraphicsRectItem(rect->mapRectToScene(meta->bbox));
+        bbox->setPen(QPen(Qt::red, 2));
+    points->addToGroup(bbox);
+
+
 }
 
 bool MyView::scaleView(qreal scaleFactor)
@@ -319,13 +329,11 @@ MyView::~MyView()
 
 }
 
-void MyView::update_ladmarks(QList<QPointF> source)
+
+
+void MyView::update_meta(QSharedPointer<Meta> mmeta)
 {
-    qDebug()<<"update_ladmarks";
-    list.clear();
-    list.append(source);
-    qDebug()<<"landmarks size: "<<list.size();
-    update_meta();
+   meta=mmeta;
 }
 
 void MyView::load(QString filapath)

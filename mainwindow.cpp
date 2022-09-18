@@ -29,6 +29,11 @@ QSharedPointer<Meta> MainWindow::convertJsonToMeta(QJsonObject one)
     int x = bbox["x"].toInt();
     int y = bbox["y"].toInt();
 
+    meta->bbox.setX(x);
+    meta->bbox.setY(y);
+    meta->bbox.setWidth(width);
+    meta->bbox.setHeight(height);
+
       qDebug()<<"get bbox: "<<height<<" "<<width<<" "<<x<<" "<<y;
 
    QJsonArray landmarks_json = one["landmarks"].toArray();
@@ -55,23 +60,41 @@ QSharedPointer<Meta> MainWindow::convertJsonToMeta(QJsonObject one)
 
 }
 
+void MainWindow::load(int index)
+{
+    QString key = paths.at(index);
+
+    if(map.value(key).isNull())
+        return;
+    ui->widget->load(key);
+
+    ui->widget->update_meta(map.value(key));
+
+
+}
+
 
 
 void MainWindow::on_actionLOAD_triggered()
 {
 
-     paths = QFileDialog::getOpenFileNames(this,
+     QStringList newPaths = QFileDialog::getOpenFileNames(this,
         tr("Open Image"),
         QStandardPaths::writableLocation(QStandardPaths::CacheLocation),
         tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
 
-    if (paths.isEmpty())
+    if (newPaths.isEmpty())
         return;
 
-    foreach(auto one,paths){
-        qDebug()<<one;
-        rest.add_request(one);
+    foreach(auto one,newPaths){
+       if(!paths.contains(one)){
+           paths.append(one);
+            rest.add_request(one);
+       }
+
+
     }
+
     rest.request_detect();
 
  //   ui->widget->load(qStrFilePath);
@@ -107,13 +130,9 @@ if(paths.size()==0)
 
 
 
-QString key = paths.at(current);
+load(current);
 
-if(map.value(key).isNull())
-    return;
-ui->widget->load(key);
 
-ui->widget->update_ladmarks(map.value(key)->landmarks);
 if(current+1>=paths.size()){
     current=0;
 }else
@@ -130,20 +149,13 @@ void MainWindow::on_pushButton_3_clicked()
 {
 qDebug()<<"prev";
 qDebug()<<"next";
+
+
 if(paths.size()==0)
     return;
 
+load(current);
 
-
-
-
-
-
-QString key = paths.at(current);
-if(map.value(key).isNull())
-    return;
-ui->widget->load(key);
-ui->widget->update_ladmarks(map.value(key)->landmarks);
 if(current-1<0){
     current=paths.size()-1;
 }else

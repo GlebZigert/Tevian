@@ -25,6 +25,8 @@ public:
 
     QSharedPointer<Meta> convertJsonToMeta(QJsonObject);
 
+    void load(int index);
+
 
 private slots:
     void on_actionLOAD_triggered();
@@ -33,6 +35,8 @@ private slots:
     void on_pushButton_2_clicked();
     void wheelEvent(QWheelEvent *event) override;
     void on_pushButton_3_clicked();
+
+
 
 private:
     Ui::MainWindow *ui;

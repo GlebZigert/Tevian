@@ -7,6 +7,7 @@
 #include <QSharedPointer>
 #include <QWheelEvent>
 #include <myitem.h>
+#include <meta.h>
 #include <QGraphicsItemGroup>
 
 class MyView : public QGraphicsView
@@ -32,7 +33,10 @@ private:
     bool flag;
 
     qreal scale;
-     QList<QPointF> list;
+
+
+    QSharedPointer<Meta> meta;
+
     void zoomIn();
     void zoomOut();
     void deleteItemsFromGroup(QGraphicsItemGroup *group);
@@ -44,6 +48,8 @@ public:
     MyView(QWidget *parent = 0);
     ~MyView();
     void update_ladmarks( QList<QPointF> list);
+    void update_bbox( QRectF bbox);
+    void update_meta(QSharedPointer<Meta>);
     void load(QString filapath);
 
 protected:

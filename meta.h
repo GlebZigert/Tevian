@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QPointF>
 #include <QList>
+#include <QRectF>
 
 class Meta : public QObject
 {
@@ -12,6 +13,7 @@ public:
     explicit Meta(QObject *parent = nullptr);
 
      QList<QPointF> landmarks;
+     QRectF bbox;
 
 signals:
 

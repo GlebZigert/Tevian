@@ -12,7 +12,7 @@
 #include <QPoint>
 #include <QFile>
 #include <QQueue>
-#include <meta.h>
+#include "meta.h"
 
 enum expectType{
     token,

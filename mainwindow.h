@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "rest.h"
 #include <QStandardPaths>
-#include <meta.h>
+#include "meta.h"
 #include <QSharedPointer>
 
 QT_BEGIN_NAMESPACE

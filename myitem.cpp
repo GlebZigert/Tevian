@@ -25,7 +25,7 @@ void MyItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     QRectF rect = boundingRect();
 
 
-        painter->drawEllipse(-1,-1,1,1);
+     //   painter->drawEllipse(-1,-1,1,1);
         painter->drawPixmap(0,0,this->width,this->height,pxm);
 
         foreach(QPointF point, list){

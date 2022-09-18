@@ -10,7 +10,7 @@ MyView::MyView(QWidget *parent)
     scene = new QGraphicsScene();
     setScene(scene);
 
-    scene->addEllipse(0,0,1,1);
+  //  scene->addEllipse(0,0,1,1);
 
     points = new QGraphicsItemGroup();
 
@@ -31,7 +31,7 @@ MyView::MyView(QWidget *parent)
 
     scale=1;
     flag = false;
-QPen pen(Qt::blue);
+QPen pen(Qt::white);
     area = new QGraphicsRectItem(0,0,scene->width()/2,scene->height()/2);
     area->setFlag(QGraphicsItem::ItemIsMovable,false);
     area->setPen(pen);

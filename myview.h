@@ -6,8 +6,8 @@
 #include <QGraphicsScene>
 #include <QSharedPointer>
 #include <QWheelEvent>
-#include <myitem.h>
-#include <meta.h>
+#include "myitem.h"
+#include "meta.h"
 #include <QGraphicsItemGroup>
 
 class MyView : public QGraphicsView

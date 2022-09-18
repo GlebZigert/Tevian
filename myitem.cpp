@@ -28,6 +28,8 @@ void MyItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
      //   painter->drawEllipse(-1,-1,1,1);
         painter->drawPixmap(0,0,this->width,this->height,pxm);
 
+       //   painter->drawRect(0,0,this->width,this->height);
+
         foreach(QPointF point, list){
             painter->drawEllipse(point.x(),
                                  point.y(),

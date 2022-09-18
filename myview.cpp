@@ -62,7 +62,7 @@ void MyView::zoomIn()
 
 void MyView::zoomOut()
 {
-    if(n>2){
+    if(n>-50){
     qDebug()<<"out";
     if(scaleView(1/qreal(1.05)))
         n--;
@@ -143,7 +143,7 @@ bool MyView::scaleView(qreal scaleFactor)
 
 
     //Точка масштабирования в пиксмапе
-
+/*
     QPointF f1 = rect->mapFromScene(f);
     //Расстояние от точки до левого края пиксмапа
 
@@ -171,16 +171,7 @@ bool MyView::scaleView(qreal scaleFactor)
     a2*=scaleFactor;
     a3*=scaleFactor;;
     a4*=scaleFactor;
-/*
-    qDebug()<<a1<<" "
-<<a2<<" "
-<<a3<<" "
-<<a4<<" "
-<<b1<<" "
-<<b2<<" "
-<<b3<<" "
-<<b4<<" ";
-    */
+
 
     if((a1>b1)
             &&(a2>b2)
@@ -299,6 +290,7 @@ bool res=false;
            }
 
     }
+    */
     scale*=scaleFactor;
 
 
@@ -320,6 +312,9 @@ bool res=false;
     //    if(rect->mapToScene(0,rect_h).y()>area->mapToScene(0,area_h).y()){
 
     rect->setScale(scale);
+
+
+
  //   qDebug()<<"point2: "<<p.x()<<" "<<p.y();
 
     QPointF point3 = rect->mapToScene(p);
@@ -395,10 +390,10 @@ void MyView::mouseMoveEvent(QMouseEvent *event)
         if(rect->mapToScene(0,0).y()+y<=area->mapToScene(0,0).y())
 
         if(rect->mapToScene(0,rect_h).y()+y>=area->mapToScene(0,area->rect().height()).y()){
-            rect->moveBy(x,y);
-            update_meta();
-        }
 
+        }
+        rect->moveBy(x,y);
+        update_meta();
 
      }
 
@@ -414,9 +409,9 @@ void MyView::mousePressEvent(QMouseEvent *event)
 
      QPointF f =mapToScene(viewport()->mapFromGlobal(QCursor::pos()));
 
-     QPointF ff=area->mapFromScene(f);
+     QPointF ff=rect->mapFromScene(f);
 
-    auto res = area->contains(ff);
+    auto res = rect->contains(ff);
 
     if(res==true)
         flag=true;
@@ -446,15 +441,17 @@ void MyView::resizeEvent(QResizeEvent *event)
     qDebug()<<"resize "<<w<<" "<<h;
     setSceneRect(0,0,w,h);
 
-     area->setRect(0,0,w,h);
-    QPointF x=QPointF(0,0);
+   //  area->setRect(0,0,w,h);
+  //  QPointF x=QPointF(0,0);
+      area->setRect(0,0,w/2,h/2);
+     QPointF x=QPointF(w/4,h/4);
 
     QPointF a=area->mapToScene(0,0);
 
-    area->moveBy(x.x()-a.x(),x.y()-a.y());
+  //  area->moveBy(x.x()-a.x(),x.y()-a.y());
 
-    rect->moveBy(x.x()-a.x(),x.y()-a.y());
-
+  //  rect->moveBy(x.x()-a.x(),x.y()-a.y());
+/*
     if(rect->mapToScene(0,0).x()>area->mapToScene(0,0).x()){
 
          rect->moveBy(rect->mapToScene(0,0).x()-area->mapToScene(0,0).x(),0);
@@ -477,7 +474,7 @@ void MyView::resizeEvent(QResizeEvent *event)
 
           rect->moveBy(0,area->mapToScene(0,area->rect().height()).y()-rect->mapToScene(0,rect_h).y());
     }
-
+*/
     update_meta();
 }
 
@@ -487,11 +484,11 @@ void MyView::wheelEvent(QWheelEvent *event)
 
     QPointF f =mapToScene(viewport()->mapFromGlobal(QCursor::pos()));
 
-    QPointF ff=area->mapFromScene(f);
+    QPointF ff=rect->mapFromScene(f);
 
     qDebug()<<f.x()<<" "<<f.y();
 
-   auto res = area->contains(ff);
+   auto res = rect->contains(ff);
 
    if(res!=true){
        qDebug()<<"fail!!";

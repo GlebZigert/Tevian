@@ -453,22 +453,26 @@ void MyView::resizeEvent(QResizeEvent *event)
 
 void MyView::wheelEvent(QWheelEvent *event)
 {
+ qDebug()<<"MyView::wheelEvent";
 
     QPointF f =mapToScene(viewport()->mapFromGlobal(QCursor::pos()));
 
     QPointF ff=area->mapFromScene(f);
 
+    qDebug()<<f.x()<<" "<<f.y();
+
    auto res = area->contains(ff);
 
    if(res!=true){
+       qDebug()<<"fail!!";
    return;
    }
-
-
+   if (event->delta() > 0) zoomIn();
+   else zoomOut();
+/*
        if (event->modifiers() == Qt::ControlModifier)
        {
-           if (event->delta() > 0) zoomIn();
-           else zoomOut();
+
        }
        else if (event->modifiers() == Qt::ShiftModifier)
        {
@@ -479,4 +483,5 @@ void MyView::wheelEvent(QWheelEvent *event)
        {
            QGraphicsView::wheelEvent(event);
        }
+       */
 }

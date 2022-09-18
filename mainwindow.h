@@ -31,13 +31,15 @@ private slots:
     void get_meta(QString file, QJsonObject meta);
 
     void on_pushButton_2_clicked();
-
+    void wheelEvent(QWheelEvent *event) override;
     void on_pushButton_3_clicked();
 
 private:
     Ui::MainWindow *ui;
 
     Rest rest;
+
+
 
 
 

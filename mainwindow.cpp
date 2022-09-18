@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->widget->setFocusPolicy(Qt::WheelFocus);
     current=0;
     connect(&rest,SIGNAL(meta(QString,QJsonObject)),this,SLOT(get_meta(QString,QJsonObject)));
 }
@@ -108,17 +109,44 @@ if(paths.size()==0)
 
 QString key = paths.at(current);
 
+if(map.value(key).isNull())
+    return;
 ui->widget->load(key);
+
 ui->widget->update_ladmarks(map.value(key)->landmarks);
 if(current+1>=paths.size()){
     current=0;
 }else
-current++;
+    current++;
+}
+
+void MainWindow::wheelEvent(QWheelEvent *event)
+{
+    qDebug()<<"MainWindow::wheelEvent";
 }
 
 
 void MainWindow::on_pushButton_3_clicked()
 {
 qDebug()<<"prev";
+qDebug()<<"next";
+if(paths.size()==0)
+    return;
+
+
+
+
+
+
+
+QString key = paths.at(current);
+if(map.value(key).isNull())
+    return;
+ui->widget->load(key);
+ui->widget->update_ladmarks(map.value(key)->landmarks);
+if(current-1<0){
+    current=paths.size()-1;
+}else
+    current--;
 }
 

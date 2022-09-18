@@ -62,7 +62,7 @@ void MyView::zoomIn()
 
 void MyView::zoomOut()
 {
-    if(n>1){
+    if(n>2){
     qDebug()<<"out";
     if(scaleView(1/qreal(1.05)))
         n--;

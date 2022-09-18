@@ -28,6 +28,8 @@ public:
     void load(int index);
 
 
+
+
 private slots:
     void on_actionLOAD_triggered();
     void get_meta(QString file, QJsonObject meta);
@@ -36,9 +38,12 @@ private slots:
     void wheelEvent(QWheelEvent *event) override;
     void on_pushButton_3_clicked();
 
+    void add(QStringList list);
 
 
     void on_pushButton_clicked();
+
+    void on_actionLoadFolder_triggered();
 
 private:
     Ui::MainWindow *ui;

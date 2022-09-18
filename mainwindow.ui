@@ -167,16 +167,22 @@
    </property>
    <widget class="QMenu" name="menuLOAD">
     <property name="title">
-     <string>LOAD</string>
+     <string>Меню</string>
     </property>
     <addaction name="actionLOAD"/>
+    <addaction name="actionLoadFolder"/>
    </widget>
    <addaction name="menuLOAD"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionLOAD">
    <property name="text">
-    <string>LOAD</string>
+    <string>Добавить файлы</string>
+   </property>
+  </action>
+  <action name="actionLoadFolder">
+   <property name="text">
+    <string>Добавить каталог</string>
    </property>
   </action>
  </widget>

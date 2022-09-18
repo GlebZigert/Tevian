@@ -104,16 +104,7 @@ void MainWindow::on_actionLOAD_triggered()
     if (newPaths.isEmpty())
         return;
 
-    foreach(auto one,newPaths){
-       if(!paths.contains(one)){
-           paths.append(one);
-            rest.add_request(one);
-       }
-
-
-    }
-
-    rest.request_detect();
+add(newPaths);
 
  //   ui->widget->load(qStrFilePath);
    // ui->m_graphicsView->viewFit();
@@ -188,9 +179,74 @@ if(current-1<0){
     current--;
 }
 
+void MainWindow::add(QStringList newPaths)
+{
+    if (newPaths.isEmpty())
+        return;
+
+    foreach(auto one,newPaths){
+       if(!paths.contains(one)){
+           paths.append(one);
+            rest.add_request(one);
+       }
+
+
+    }
+
+    rest.request_detect();
+}
+
 
 void MainWindow::on_pushButton_clicked()
 {
     on_actionLOAD_triggered();
+}
+
+
+void MainWindow::on_actionLoadFolder_triggered()
+{
+    QString path = QFileDialog::getExistingDirectory(this);
+    qDebug()<<path;
+
+    QStringList nameFilters;
+    nameFilters<<"*jpg";
+    nameFilters<<"*jpeg";
+    QStringList result;
+      QDir dir(path);
+      if(dir.exists() == false){
+        qDebug() << "can't open directory " << path;
+        return;
+      }
+      QFileInfoList lst = dir.entryInfoList(nameFilters,QDir::Files);
+      foreach(QFileInfo fi, lst){
+         QString fpath = fi.absoluteFilePath();
+
+
+
+          result += fpath;
+      }
+      qDebug()<<"result:";
+      qDebug()<<result;
+
+      if (result.isEmpty())
+          return;
+
+      add(result);
+
+/*
+   if (newPaths.isEmpty())
+       return;
+
+   foreach(auto one,newPaths){
+      if(!paths.contains(one)){
+          paths.append(one);
+           rest.add_request(one);
+      }
+
+
+   }
+
+   rest.request_detect();
+   */
 }
 

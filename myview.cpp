@@ -400,6 +400,25 @@ void MyView::mouseMoveEvent(QMouseEvent *event)
 
 
      prev=f;
+     qDebug()<<" ";
+
+
+
+    if(((rect->mapToScene(0,0).x())>area->mapToScene(area->rect().width(),0).x())||
+
+    ((rect->mapToScene(0,0).y())>area->mapToScene(0,area->rect().height()).y())||
+
+    ((rect->mapToScene(rect_w,rect_h).x())<area->mapToScene(0,0).x())||
+
+            (rect->mapToScene(rect_w,rect_h).y()<area->mapToScene(0,0).y())){
+
+        qDebug()<<"alarm";
+        QPointF p1 = area->mapToScene(0,0);
+        QPointF p2 = rect->mapToScene(0,0);
+        rect->moveBy(p1.x()-p2.x(),p1.y()-p2.y());
+    }
+
+
 
 }
 
@@ -443,14 +462,14 @@ void MyView::resizeEvent(QResizeEvent *event)
 
    //  area->setRect(0,0,w,h);
   //  QPointF x=QPointF(0,0);
-      area->setRect(0,0,w/2,h/2);
-     QPointF x=QPointF(w/4,h/4);
+      area->setRect(0,0,w,h);
+     QPointF x=QPointF(0,0);
 
     QPointF a=area->mapToScene(0,0);
 
-  //  area->moveBy(x.x()-a.x(),x.y()-a.y());
+    area->moveBy(x.x()-a.x(),x.y()-a.y());
 
-  //  rect->moveBy(x.x()-a.x(),x.y()-a.y());
+    rect->moveBy(x.x()-a.x(),x.y()-a.y());
 /*
     if(rect->mapToScene(0,0).x()>area->mapToScene(0,0).x()){
 

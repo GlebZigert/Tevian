@@ -18,7 +18,6 @@ enum expectType{
     token,
     detect,
     anything_else
-
 };
 
 class Rest : public QObject

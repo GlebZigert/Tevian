@@ -20,7 +20,7 @@ MainWindow::~MainWindow()
 QSharedPointer<Meta> MainWindow::convertJsonToMeta(QJsonObject one)
 {
 
-       QSharedPointer<Meta> meta =  QSharedPointer<Meta>::create();
+    QSharedPointer<Meta> meta =  QSharedPointer<Meta>::create();
 
     QJsonObject bbox = one["bbox"].toObject();
 
@@ -34,48 +34,33 @@ QSharedPointer<Meta> MainWindow::convertJsonToMeta(QJsonObject one)
     meta->bbox.setWidth(width);
     meta->bbox.setHeight(height);
 
-      qDebug()<<"get bbox: "<<height<<" "<<width<<" "<<x<<" "<<y;
+    qDebug()<<"get bbox: "<<height<<" "<<width<<" "<<x<<" "<<y;
 
-   QJsonArray landmarks_json = one["landmarks"].toArray();
+    QJsonArray landmarks_json = one["landmarks"].toArray();
 
-   QList<QPointF> list;
-//      qDebug()<<" landmarks:";
-   for(QJsonValue one : landmarks_json) {
+    QList<QPointF> list;
 
-       QPointF point;
-       int x = one["x"].toInt();
-       int y = one["y"].toInt();
-  //     qDebug()<<x<<" "<<y;
-       point.setX(x);
-       point.setY(y);
-       meta->landmarks.append(point);
-   }
+    for(QJsonValue one : landmarks_json) {
 
-   QJsonObject masks = one["masks"].toObject();
+        QPointF point;
+        int x = one["x"].toInt();
+        int y = one["y"].toInt();
 
-   qDebug()<<"==masks: "<<masks;
+        point.setX(x);
+        point.setY(y);
+        meta->landmarks.append(point);
+    }
 
-   meta->full_face_mask=QString::number( masks["full_face_mask"].toDouble());
-  meta->lower_face_mask=QString::number( masks["lower_face_mask"].toDouble());
-meta->no_mask=QString::number( masks["no_mask"].toDouble());
-meta->other_mask=QString::number( masks["other_mask"].toDouble());
+    QJsonObject masks = one["masks"].toObject();
 
+    qDebug()<<"==masks: "<<masks;
 
-  qDebug()<<"full_face_mask "<< meta->full_face_mask;
+    meta->full_face_mask=QString::number( masks["full_face_mask"].toDouble());
+    meta->lower_face_mask=QString::number( masks["lower_face_mask"].toDouble());
+    meta->no_mask=QString::number( masks["no_mask"].toDouble());
+    meta->other_mask=QString::number( masks["other_mask"].toDouble());
 
-  qDebug()<<"lower_face_mask "<< meta->lower_face_mask;
-
-
-  qDebug()<<"no_mask "<< meta->no_mask;
-
-
-  qDebug()<<"other_mask "<< meta->other_mask;
-
-   return meta;
-
-
-
-
+    return meta;
 }
 
 void MainWindow::load(int index)
@@ -87,33 +72,22 @@ void MainWindow::load(int index)
     ui->widget->load(key);
 
     ui->widget->update_meta(map.value(key));
-
-
 }
-
 
 
 void MainWindow::on_actionLOAD_triggered()
 {
 
-     QStringList newPaths = QFileDialog::getOpenFileNames(this,
-        tr("Open Image"),
-        QStandardPaths::writableLocation(QStandardPaths::CacheLocation),
-        tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
+    QStringList newPaths = QFileDialog::getOpenFileNames(this,
+                                                         tr("Open Image"),
+                                                         QStandardPaths::writableLocation(QStandardPaths::CacheLocation),
+                                                         tr("Image Files (*.png *.jpg *.jpeg *.bmp)"));
 
     if (newPaths.isEmpty())
         return;
 
-add(newPaths);
+    add(newPaths);
 
- //   ui->widget->load(qStrFilePath);
-   // ui->m_graphicsView->viewFit();
-
-
-
-
-
-  //  rest.request_detect(qStrFilePath);
 
 }
 
@@ -123,37 +97,29 @@ void MainWindow::get_meta(QString file, QJsonObject meta)
     map.insert(file,convertJsonToMeta(meta));
 
     if(map.size()<paths.size()){
-QString str="Обработано изображений: ";
-str+=QString::number(map.size());
-str+=" из ";
-str+=QString::number(paths.size());
+        QString str="Обработано изображений: ";
+        str+=QString::number(map.size());
+        str+=" из ";
+        str+=QString::number(paths.size());
 
-ui->label->setText(str);
+        ui->label->setText(str);
     }else{
         ui->label->clear();
     }
 }
 
-
 void MainWindow::on_pushButton_2_clicked()
 {
-qDebug()<<"next";
-if(paths.size()==0)
-    return;
+    qDebug()<<"next";
+    if(paths.size()==0)
+        return;
 
+    load(current);
 
-
-
-
-
-
-load(current);
-
-
-if(current+1>=paths.size()){
-    current=0;
-}else
-    current++;
+    if(current+1>=paths.size()){
+        current=0;
+    }else
+        current++;
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)
@@ -161,22 +127,18 @@ void MainWindow::wheelEvent(QWheelEvent *event)
     qDebug()<<"MainWindow::wheelEvent";
 }
 
-
 void MainWindow::on_pushButton_3_clicked()
 {
-qDebug()<<"prev";
-qDebug()<<"next";
 
+    if(paths.size()==0)
+        return;
 
-if(paths.size()==0)
-    return;
+    load(current);
 
-load(current);
-
-if(current-1<0){
-    current=paths.size()-1;
-}else
-    current--;
+    if(current-1<0){
+        current=paths.size()-1;
+    }else
+        current--;
 }
 
 void MainWindow::add(QStringList newPaths)
@@ -185,10 +147,10 @@ void MainWindow::add(QStringList newPaths)
         return;
 
     foreach(auto one,newPaths){
-       if(!paths.contains(one)){
-           paths.append(one);
+        if(!paths.contains(one)){
+            paths.append(one);
             rest.add_request(one);
-       }
+        }
 
 
     }
@@ -196,12 +158,10 @@ void MainWindow::add(QStringList newPaths)
     rest.request_detect();
 }
 
-
 void MainWindow::on_pushButton_clicked()
 {
     on_actionLOAD_triggered();
 }
-
 
 void MainWindow::on_actionLoadFolder_triggered()
 {
@@ -212,41 +172,23 @@ void MainWindow::on_actionLoadFolder_triggered()
     nameFilters<<"*jpg";
     nameFilters<<"*jpeg";
     QStringList result;
-      QDir dir(path);
-      if(dir.exists() == false){
-        qDebug() << "can't open directory " << path;
+    QDir dir(path);
+    if(dir.exists() == false){
         return;
-      }
-      QFileInfoList lst = dir.entryInfoList(nameFilters,QDir::Files);
-      foreach(QFileInfo fi, lst){
-         QString fpath = fi.absoluteFilePath();
+    }
+    QFileInfoList lst = dir.entryInfoList(nameFilters,QDir::Files);
+    foreach(QFileInfo fi, lst){
+        QString fpath = fi.absoluteFilePath();
 
 
 
-          result += fpath;
-      }
-      qDebug()<<"result:";
-      qDebug()<<result;
+        result += fpath;
+    }
 
-      if (result.isEmpty())
-          return;
+    if (result.isEmpty())
+        return;
 
-      add(result);
+    add(result);
 
-/*
-   if (newPaths.isEmpty())
-       return;
-
-   foreach(auto one,newPaths){
-      if(!paths.contains(one)){
-          paths.append(one);
-           rest.add_request(one);
-      }
-
-
-   }
-
-   rest.request_detect();
-   */
 }
 

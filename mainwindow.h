@@ -27,9 +27,6 @@ public:
 
     void load(int index);
 
-
-
-
 private slots:
     void on_actionLOAD_triggered();
     void get_meta(QString file, QJsonObject meta);
@@ -49,11 +46,5 @@ private:
     Ui::MainWindow *ui;
 
     Rest rest;
-
-
-
-
-
-
 };
 #endif // MAINWINDOW_H
